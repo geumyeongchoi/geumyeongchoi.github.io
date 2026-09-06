@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>최금영 — Backend Engineer Portfolio</title>
+<meta name="description" content="Kotlin·Spring 백엔드 10년. 사이드 프로젝트 3건(RAG 챗봇 docmind · 초저지연 주문 API flashgate · k3s 플랫폼)의 문제 정의, 설계 판단, 실측 수치.">
+<style>
+  :root { --ink:#16202b; --muted:#5f6b78; --line:#e4e8ee; --bg:#fbfbfc; --card:#fff; --accent:#1f4fd1; --accent-soft:#eef2ff; --ok:#1e7a3a; --warn:#9a6700; }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.7 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:var(--accent); text-decoration:none; } a:hover { text-decoration:underline; }
+  .wrap { max-width: 900px; margin:0 auto; padding: 0 22px; }
+  header.top { padding:56px 0 28px; border-bottom:1px solid var(--line); background:var(--card); }
+  header.top h1 { margin:0 0 6px; font-size:30px; letter-spacing:-.01em; }
+  header.top .role { color:var(--muted); font-size:16px; margin:0 0 18px; }
+  header.top .links { display:flex; flex-wrap:wrap; gap:8px 18px; font-size:14px; }
+  .intro { margin:22px 0 0; font-size:15.5px; }
+  .intro p { margin:0 0 10px; }
+  nav.toc { position:sticky; top:0; z-index:5; background:rgba(251,251,252,.92); backdrop-filter:blur(6px); border-bottom:1px solid var(--line); }
+  nav.toc .wrap { display:flex; gap:20px; padding:10px 22px; font-size:13.5px; overflow-x:auto; white-space:nowrap; }
+  nav.toc a { color:var(--muted); } nav.toc a:hover { color:var(--accent); text-decoration:none; }
+  section { padding:44px 0 8px; }
+  section > .wrap > h2 { font-size:22px; margin:0 0 6px; letter-spacing:-.01em; }
+  .lead { color:var(--muted); margin:0 0 22px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:26px 28px; margin:0 0 26px; }
+  .card h3 { margin:0; font-size:20px; }
+  .card .sub { color:var(--muted); margin:4px 0 14px; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 18px; }
+  .chip { font-size:12px; padding:3px 9px; border-radius:999px; background:var(--accent-soft); color:var(--accent); }
+  .grid { display:grid; grid-template-columns: 1fr 1fr; gap:18px 26px; }
+  .grid h4, .card h4 { margin:14px 0 6px; font-size:14px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+  .card p { margin:0 0 10px; }
+  .kpis { display:grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap:12px; margin:8px 0 6px; }
+  .kpi { border:1px solid var(--line); border-radius:10px; padding:12px 14px; background:#fff; }
+  .kpi b { display:block; font-size:22px; letter-spacing:-.02em; }
+  .kpi span { font-size:12.5px; color:var(--muted); }
+  pre.arch { background:#0f172a; color:#e2e8f0; border-radius:10px; padding:16px 18px; font:12.5px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace; overflow-x:auto; margin:8px 0 14px; }
+  table { border-collapse:collapse; width:100%; font-size:13.5px; margin:6px 0 12px; }
+  th, td { border-bottom:1px solid var(--line); padding:7px 8px; text-align:left; vertical-align:top; }
+  th { color:var(--muted); font-weight:600; background:#f6f7fa; }
+  td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
+  .note { font-size:13px; color:var(--muted); }
+  ul.tight { margin:4px 0 10px 18px; padding:0; } ul.tight li { margin:0 0 6px; }
+  .links-row { display:flex; flex-wrap:wrap; gap:8px 18px; font-size:14px; margin-top:12px; }
+  .stack { display:grid; grid-template-columns: 150px 1fr; gap:6px 14px; font-size:14px; }
+  .stack dt { color:var(--muted); } .stack dd { margin:0; }
+  footer { padding:36px 0 60px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); margin-top:30px; }
+  .badge-ok { color:var(--ok); font-weight:600; }
+  @media (max-width: 700px) { .grid { grid-template-columns:1fr; } header.top { padding:40px 0 24px; } .card { padding:20px 18px; } }
+  @media print {
+    :root { --bg:#fff; }
+    nav.toc { display:none; }
+    body { font-size:11.5pt; }
+    header.top { padding:0 0 14px; }
+    section { padding:18px 0 0; break-inside:auto; }
+    .card { break-inside:auto; border-color:#ccd; padding:16px 18px; margin-bottom:14px; }
+    .card h3, .card h4, .kpis, table, pre.arch, .kpi { break-inside:avoid; }
+    .grid { grid-template-columns:1fr; }
+    pre.arch { background:#f3f5f9; color:#111; border:1px solid #dde; font-size:8.5pt; white-space:pre; overflow:visible; }
+    @page { size:A4; margin:14mm 12mm; }
+    a { color:#1f4fd1; } a[href^="http"]::after { content:""; }
+    .kpi b { font-size:16pt; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <h1>최금영</h1>
+    <p class="role">Backend Engineer · Kotlin / Java · Spring Boot · 10년차 · MSA 전환 · 이벤트 기반 · AI-native 개발 프로세스</p>
+    <div class="links">
+      <a href="https://github.com/geumyeongchoi" target="_blank" rel="noopener">GitHub github.com/geumyeongchoi</a>
+      <a href="https://candyit.tistory.com/" target="_blank" rel="noopener">기술 블로그</a>
+      <a href="https://grass-king-5f5.notion.site/1399a68972ba8044aa41e285b33ce6af" target="_blank" rel="noopener">Notion 경력 소개</a>
+    </div>
+    <div class="intro">
+      <p>레거시 주문 시스템을 서비스 중단 없이 MSA + 카드결제로 전환하고, AI 코딩 에이전트가 안전하게 기여할 수 있는 개발 하네스(규칙 → 사전 차단 훅 → 검증 게이트 → 티켓→스펙→구현→인수테스트)를 설계·운영하는 백엔드 개발자입니다. 식자재·외식 커머스, 제조 AI 품질검사, AIOps, CRM/보안 솔루션 도메인을 거쳤습니다.</p>
+      <p>이 페이지는 2026년 9월, 2주 동안 진행한 사이드 프로젝트 3건의 기록입니다. 각 프로젝트는 <b>문제 정의 → 설계 판단(대안 비교) → 실측 수치 → 배운 것</b> 순서로 정리했고, 모든 수치는 저장소 안의 결과 파일에서 인용했습니다(추정치 없음).</p>
+    </div>
+  </div>
+</header>
+
+<nav class="toc"><div class="wrap">
+  <a href="#overview">개요</a>
+  <a href="#docmind">1 · docmind — 문서 RAG 챗봇</a>
+  <a href="#flashgate">2 · flashgate — 초저지연·고가용성 주문 API</a>
+  <a href="#platform">3 · homelab-platform — k3s 배포·관측</a>
+  <a href="#how">개발 방식</a>
+  <a href="#stack">기술 스택</a>
+</div></nav>
+
+<section id="overview">
+  <div class="wrap">
+    <h2>개요 — 왜 이 세 가지인가</h2>
+    <p class="lead">채용 공고에서 반복되는 요구(RAG/LLM 연동 · 대용량 트래픽과 고가용성 · Kubernetes/CI-CD/모니터링)를 각각 하나의 작은 프로젝트로 실증하되, 서로 연결되도록 설계했습니다. 1·2번 서비스는 3번 플랫폼 위에 배포됩니다.</p>
+    <table>
+      <tr><th style="width:26%">프로젝트</th><th>한 줄 정의</th><th style="width:34%">핵심 실측</th></tr>
+      <tr><td><a href="#docmind">docmind</a></td><td>문서를 올리면 그 문서만 근거로 답하고 출처를 붙이는 사무용 RAG 챗봇. 사내망(Ollama) ↔ 외부 모델(OpenAI/Anthropic) 프로파일 전환.</td><td>정답 포함률 43% → <b>76.7%</b>(프롬프트 회귀 평가) · 하이브리드 검색 +6.7pt · 근거 없으면 LLM 미호출</td></tr>
+      <tr><td><a href="#flashgate">flashgate</a></td><td>선착순 한정수량 주문 API. Redis Lua 원자 예약 + 아웃박스/Kafka 확정, Sentinel failover와 인스턴스 강제 종료를 카오스 테스트로 검증.</td><td>동시 1,000 요청 <b>초과판매 0</b> · spike 1,496 rps p50 1.6 ms · Redis master kill 중 500 오류 0 · 앱 SIGKILL 실패율 0.10%</td></tr>
+      <tr><td><a href="#platform">homelab-platform</a></td><td>자체 Linux 서버 k3s 위에 두 서비스를 HTTPS 도메인으로 배포하고, PR 머지 한 번으로 롤아웃, Grafana 한 화면에서 로그·메트릭·트레이스.</td><td>Helm 차트 2종 · GitHub Actions → GHCR → 롤링 배포 · LGTM 스택 (서버 배포 후 수치 갱신 예정)</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="docmind">
+  <div class="wrap">
+    <h2>1 · docmind — 사내 문서 RAG 챗봇 (private / public 전환형)</h2>
+    <p class="lead">Kotlin 2.2 · Spring Boot 3.5 · Spring AI 1.1 · PostgreSQL 17 + pgvector · Ollama / OpenAI / Anthropic · MCP Server &nbsp;·&nbsp; <a href="https://github.com/geumyeongchoi/docmind" target="_blank" rel="noopener">github.com/geumyeongchoi/docmind</a></p>
+
+    <div class="card">
+      <h3>문제</h3>
+      <p class="sub">사규·기술 문서·회의록은 흩어져 있고 키워드 검색은 "연차 이월돼요?" 같은 질문에 답하지 못한다. 문서를 외부 LLM에 보내면 안 되는 조직이 많고, 반대로 정확도가 중요할 때는 상용 모델을 쓰고 싶다.</p>
+      <div class="chips"><span class="chip">RAG</span><span class="chip">하이브리드 검색(RRF)</span><span class="chip">SSE 스트리밍</span><span class="chip">프로파일 전환</span><span class="chip">평가셋 회귀</span><span class="chip">MCP</span></div>
+      <h4>아키텍처</h4>
+<pre class="arch">[Web UI] ──SSE──▶ [docmind-api  Kotlin · Spring Boot 3.5 · Spring AI 1.1]
+                     ├ Ingest   : Tika → OverlappingTokenSplitter(600/80) → Embedding → pgvector
+                     ├ Retrieval: 벡터 ∥ 전문검색(tsvector) → RRF 병합 → topK 6
+                     ├ Chat     : 근거 없으면 LLM 미호출 / ChatClient + MessageChatMemory / 질문 세이프가드
+                     ├ Viewer   : 출처 카드·[출처: n] → 원문 뷰어(청크 강조, PDF #page)
+                     └ MCP      : search_docs · ask_docs  (Claude Desktop / Claude Code 에서 도구로 사용)
+        profile=private → Ollama  (bge-m3 1024d · gemma3:4b)                    데이터가 서버 밖으로 안 나감
+        profile=public  → OpenAI  (text-embedding-3-small 1536d · gpt-4.1-mini)
+        profile=claude  → Anthropic(chat) + Ollama bge-m3(embedding)             질문+검색 청크만 외부로
+        PostgreSQL 17 + pgvector  (documents · document_files · docmind_private · docmind_public · tsvector GIN)</pre>
+      <div class="grid">
+        <div>
+          <h4>설계 판단 (대안 비교)</h4>
+          <ul class="tight">
+            <li><b>Spring AI 단일 JVM 서비스</b> vs Python LangChain 별도 서비스 — 배포·관측·테스트를 한 벌로. Loader/Splitter/VectorStore/Advisor가 LangChain 개념과 1:1이라 학습 비용 없이 같은 설계를 옮길 수 있었다.</li>
+            <li><b>pgvector + tsvector 하이브리드(RRF)</b> vs 벡터 단독/전용 벡터DB — 추가 인프라 0, 고유명사·코드명 recall 보완. 파라미터가 k 하나뿐이라 튜닝이 단순하다.</li>
+            <li><b>근거 없으면 LLM을 호출하지 않는다</b> vs 프롬프트로 억제 — 비용 0, 환각 차단, 지연 최소. 임계값은 평가셋으로 정한다.</li>
+            <li><b>프로파일별 벡터 테이블 분리</b> — 임베딩 차원(1024 vs 1536)이 다르면 같은 인덱스에 섞을 수 없다. Anthropic 은 임베딩 API가 없어 로컬 임베딩과 조합했고, 덕분에 private 로 올린 문서를 재인제스트 없이 공유한다.</li>
+            <li><b>세이프가드를 질문에만 적용</b> — 프롬프트 전체를 검사하는 SafeGuardAdvisor는 인젝션 문구가 든 문서가 검색되는 순간 정상 질문까지 거절했다.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>실측 — 평가셋 30문항, 같은 문서·같은 모델(gemma3:4b)</h4>
+          <table>
+            <tr><th>시스템 프롬프트</th><th>검색</th><th class="num">정답 포함률</th><th class="num">p50</th></tr>
+            <tr><td>v1 엄격 거절 우선</td><td>hybrid</td><td class="num">43.3%</td><td class="num">4.6s</td></tr>
+            <tr><td>v2 "관련 문장 있으면 반드시 답"</td><td>hybrid</td><td class="num">70.0%</td><td class="num">5.5s</td></tr>
+            <tr><td>v3 번호 인용 + 거절 재강조</td><td>hybrid</td><td class="num">56.7%</td><td class="num">5.4s</td></tr>
+            <tr><td>v3 동일</td><td>vector only</td><td class="num">50.0%</td><td class="num">5.1s</td></tr>
+            <tr><td><b>v4 채택</b></td><td>hybrid</td><td class="num"><b>76.7%</b></td><td class="num">5.9s</td></tr>
+          </table>
+          <table>
+            <tr><th>청크 크기/오버랩</th><th class="num">청크 수</th><th class="num">정답 포함률</th><th class="num">p50</th></tr>
+            <tr><td>300 / 37</td><td class="num">17</td><td class="num"><b>83.3%</b></td><td class="num">4.7s</td></tr>
+            <tr><td>600 / 80 (기본)</td><td class="num">9</td><td class="num">76.7%</td><td class="num">5.9s</td></tr>
+            <tr><td>1000 / 125</td><td class="num">8</td><td class="num">80.0%</td><td class="num">7.0s</td></tr>
+          </table>
+          <p class="note">환경: MacBook Pro(Apple Silicon) · profile=private · bge-m3 · topK 6 · 문서 8종. 원본: <code>eval/results/*.md</code></p>
+        </div>
+      </div>
+      <h4>배운 것</h4>
+      <ul class="tight">
+        <li><b>프롬프트 문구 하나로 43% ↔ 77%.</b> 4B 모델은 거절 규칙의 위치와 강도에 매우 민감하다. 프롬프트는 코드처럼 평가셋으로 회귀 테스트해야 한다는 것이 이 표의 결론이고, 그래서 <code>./gradlew eval</code> 한 번으로 표가 갱신되게 만들었다.</li>
+        <li><b>하이브리드 vs 벡터 단독 +6.7pt.</b> 차이를 만든 것은 고유명사 문항(<code>PRC_SOOROU001</code>, <code>E4012</code>, 토픽명)이었다.</li>
+        <li><b>인용 정확률 100%는 아직 의미가 없다.</b> 코퍼스가 9청크라 topK 6이 거의 전부를 덮는다. 문서 30+로 늘려 재측정하는 것이 다음 순서.</li>
+        <li>qwen3:4b 는 기본이 thinking 모드라 RAG 컨텍스트에서 응답 103초 → gemma3:4b 로 교체. Docker Engine 29 는 Testcontainers 구버전 API를 거절해 <code>DOCKER_API_VERSION=1.44</code> 필요.</li>
+      </ul>
+      <div class="links-row">
+        <a href="https://github.com/geumyeongchoi/docmind/blob/main/README.md" target="_blank" rel="noopener">README (실측 표)</a>
+        <a href="https://github.com/geumyeongchoi/docmind/blob/main/docs/design.md" target="_blank" rel="noopener">설계 문서 (C4 · 시퀀스 · ERD · ADR 8건)</a>
+        <a href="https://www.figma.com/board/XBqQCmaNaMFG98Cx2xP9ZH" target="_blank" rel="noopener">FigJam 설계도</a>
+        <a href="https://github.com/geumyeongchoi/docmind/blob/main/docs/mcp.md" target="_blank" rel="noopener">MCP 연동</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="flashgate">
+  <div class="wrap">
+    <h2>2 · flashgate — 선착순 한정수량 주문 API (초저지연 · 고가용성)</h2>
+    <p class="lead">Kotlin 2.2 · Spring Boot 3.5 · JDK 21 가상 스레드 · Redis 7 Sentinel(Lettuce) · Kafka · MySQL 8.4 · Resilience4j · Traefik · k6 &nbsp;·&nbsp; <a href="https://github.com/geumyeongchoi/flashgate" target="_blank" rel="noopener">github.com/geumyeongchoi/flashgate</a></p>
+
+    <div class="card">
+      <h3>문제</h3>
+      <p class="sub">재고 100개짜리 상품에 1초에 수천 명이 몰려도 초과판매 0건, p99 수십 ms, 그리고 앱 인스턴스나 Redis 마스터가 죽어도 요청이 "조용히 실패"하지 않아야 한다. 흔한 해법(DB 비관락, 분산락)은 정확하지만 락 대기 때문에 지연이 트래픽에 비례해 늘어난다.</p>
+      <div class="chips"><span class="chip">Redis Lua 원자 연산</span><span class="chip">멱등키</span><span class="chip">Transactional Outbox</span><span class="chip">Kafka</span><span class="chip">Sentinel failover</span><span class="chip">Resilience4j</span><span class="chip">k6 카오스</span></div>
+      <h4>아키텍처</h4>
+<pre class="arch">client ─▶ Traefik(헬스체크 1s · retry 1회) ─▶ [flashgate-api ×2]  JDK 21 가상 스레드
+                         │  POST /api/orders {productId, userId, idempotencyKey}
+                         ▼  EVALSHA reserve.lua  (재고 확인 + 차감 + 유저 중복 체크 + 예약 기록 = 1 round-trip)
+                   [Redis Sentinel: master + replica×2 + sentinel×3]
+                         │  성공 시 outbox INSERT(같은 트랜잭션) → 202 {orderId, RESERVED}
+                         ▼
+                   [Kafka] order.reserved ◀── outbox relay(100ms · SKIP LOCKED)
+                         ▼
+                   [order-confirm consumer]  모의 PG(5% 거절) → MySQL CONFIRMED → order.confirmed
+                                             실패 시 compensate.lua 로 재고 복원 + order.cancelled
+                   매 1분 대사: Redis 잔여 + MySQL 확정 + 취소 = 초기 재고  (불일치 → 메트릭 알람)</pre>
+      <div class="kpis">
+        <div class="kpi"><b>0</b><span>초과판매 (동시 1,000 요청 · 재고 100 → 202 정확히 100건)</span></div>
+        <div class="kpi"><b>1,496 rps</b><span>spike 재고 100 · 5,000명 10s · 5xx 0</span></div>
+        <div class="kpi"><b>1.6 ms</b><span>spike p50 (p99 27.6 ms)</span></div>
+        <div class="kpi"><b>500 오류 0</b><span>Redis master kill 중 — 실패는 전부 503 + Retry-After</span></div>
+      </div>
+      <div class="grid">
+        <div>
+          <h4>실측 — 시나리오별 (로컬 Docker · 앱 2대 + Sentinel 3 + Traefik)</h4>
+          <table>
+            <tr><th>시나리오</th><th class="num">요청</th><th class="num">5xx</th><th class="num">p50</th><th class="num">p99</th></tr>
+            <tr><td>spike — 재고 100, 5,000명 10s</td><td class="num">15,149</td><td class="num">0</td><td class="num">1.6 ms</td><td class="num">27.6 ms</td></tr>
+            <tr><td>ramp — 100→1,000 rps 55s</td><td class="num">39,001</td><td class="num">0</td><td class="num">2.0 ms</td><td class="num">27.3 ms</td></tr>
+            <tr><td>chaos — Redis master kill 중 300 rps</td><td class="num">18,001</td><td class="num">5.7% (전부 503)</td><td class="num">1.9 ms</td><td class="num">203 ms</td></tr>
+            <tr><td>chaos — 앱 1대 SIGKILL 중 300 rps</td><td class="num">18,002</td><td class="num">0.10%</td><td class="num">2.0 ms</td><td class="num">35 ms</td></tr>
+          </table>
+          <p class="note">Redis master kill: 1차(down-after 5s, 예외 매핑 전) 500 ×2,433(13.5%) → 2차 503 ×1,021(5.7%), 실패 창 ≈ 3.4s. 앱 SIGKILL: Traefik retry 적용 전 1.5% → 0.10%. 원본: <code>k6/results/*.md</code></p>
+        </div>
+        <div>
+          <h4>설계 판단 — 대안을 구현해서 같은 부하로 비교</h4>
+          <table>
+            <tr><th>전략</th><th class="num">5xx</th><th class="num">p50</th><th class="num">p95</th><th class="num">p99</th></tr>
+            <tr><td><b>lua</b> Redis Lua 원자 차감 (채택) · Sentinel 경유</td><td class="num">0</td><td class="num">2.39</td><td class="num">23.98</td><td class="num">42.65</td></tr>
+            <tr><td>lua · Redis 직접 연결</td><td class="num">0.003%</td><td class="num"><b>0.88</b></td><td class="num"><b>1.97</b></td><td class="num"><b>4.32</b></td></tr>
+            <tr><td>dblock · MySQL SELECT … FOR UPDATE</td><td class="num">0</td><td class="num">1.58</td><td class="num">5.40</td><td class="num">13.18</td></tr>
+            <tr><td>redisson · RLock(tryLock 50ms)</td><td class="num"><b>50.0%</b></td><td class="num">2.14</td><td class="num">8.85</td><td class="num">18.14</td></tr>
+          </table>
+          <p class="note">ramp 100→1,000 rps · 재고 10만 · 단위 ms · 세 전략 모두 초과판매 0.</p>
+        </div>
+      </div>
+      <h4>배운 것</h4>
+      <ul class="tight">
+        <li><b>"Lua가 락보다 빠르다"는 이 규모(700 rps, 단일 상품)에서는 자명하지 않았다.</b> 로컬 MySQL 행 락은 충분히 빨랐다. Lua의 진짜 이점은 DB 커넥션을 핫패스에서 완전히 빼는 것(DB 장애·풀 고갈과 분리)과 경합이 커질 때 락 대기가 없다는 점이며, 더 높은 rps와 원격 DB에서 증명해야 한다.</li>
+        <li><b>분산락은 경합이 실패율로 전이된다.</b> tryLock 대기를 늘리면 실패율은 내려가지만 지연이 그만큼 큐잉된다 — 선착순 트래픽에는 구조적으로 불리.</li>
+        <li><b>가장 큰 변수는 알고리즘이 아니라 연결 경로였다.</b> Sentinel 경유 Lettuce 가 p95 24 ms, 직접 연결이 2 ms. 원인 후보(토폴로지 리프레시, ReadFrom, Docker 네트워크 홉)를 다음 단계로 남겨 두었다.</li>
+        <li><b>failover 창의 실패는 "빠른 503"으로 바꾸는 것이 목표</b>이지 0으로 만드는 것이 아니다. Retry(50→100→200ms)는 수 초의 failover를 덮을 수 없으므로 남는 요청은 503 + Retry-After 로 즉시 돌려보내 큐잉·지연 폭증을 막고, 클라이언트는 멱등키로 안전하게 재시도한다. 예외 매핑이 빠지면 같은 장애가 500으로 보인다.</li>
+      </ul>
+      <div class="links-row">
+        <a href="https://github.com/geumyeongchoi/flashgate/blob/main/README.md" target="_blank" rel="noopener">README (실측 표 · 대안 비교)</a>
+        <a href="https://github.com/geumyeongchoi/flashgate/tree/main/k6" target="_blank" rel="noopener">k6 시나리오 · 결과</a>
+        <a href="https://github.com/geumyeongchoi/flashgate/tree/main/src/main/resources/lua" target="_blank" rel="noopener">reserve.lua · compensate.lua</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="platform">
+  <div class="wrap">
+    <h2>3 · homelab-platform — 자체 서버 k3s · CI/CD · 관측 · HTTPS</h2>
+    <p class="lead">k3s · cert-manager(Let's Encrypt) · Helm · GitHub Actions → GHCR · kube-prometheus-stack · Loki · Tempo · OpenTelemetry &nbsp;·&nbsp; <a href="https://github.com/geumyeongchoi/homelab-platform" target="_blank" rel="noopener">github.com/geumyeongchoi/homelab-platform</a></p>
+
+    <div class="card">
+      <h3>문제</h3>
+      <p class="sub">위 두 서비스를 "내 서버에서 도메인으로 접속 가능한 상태"로 두고, PR 머지 한 번으로 배포되며, 배포 중에도 에러율 0을 유지하고, 문제가 생기면 Grafana 한 화면에서 로그·메트릭·트레이스를 따라갈 수 있어야 한다.</p>
+      <div class="chips"><span class="chip">Kubernetes(k3s)</span><span class="chip">Helm</span><span class="chip">GitHub Actions</span><span class="chip">HPA · PDB · probe</span><span class="chip">OTel 자동계측</span><span class="chip">LGTM</span></div>
+<pre class="arch">GitHub (docmind / flashgate PR 머지)
+   │ Actions: test → jib 이미지 → GHCR push → kubectl set image (실패 시 rollout undo)
+   ▼
+[Linux 서버] k3s (single node · Traefik ingress 내장)
+   ├─ cert-manager + Let's Encrypt → *.도메인 HTTPS
+   ├─ ns docmind       : Deployment(1) + pgvector StatefulSet
+   ├─ ns flashgate     : Deployment(2 · PDB minAvailable=1 · HPA cpu 70% · preStop) + redis(sentinel) + kafka + mysql
+   ├─ ns observability : kube-prometheus-stack · Loki(+Alloy) · Tempo · OTel Collector  ← OTel Java agent(initContainer 주입)
+   └─ ns platform      : sealed-secrets · whoami</pre>
+      <div class="grid">
+        <div>
+          <h4>설계 판단</h4>
+          <ul class="tight">
+            <li><b>k3s</b> vs Compose / kubeadm / EKS — Compose는 K8s 운영 경험이 되지 않고, kubeadm은 설치가 하루, EKS는 월 $70+. k3s는 10분 설치·Traefik 내장·512MB.</li>
+            <li><b>GHCR + kubectl set image(push형)</b> vs ArgoCD — 2주 안에는 push형이 현실적. GitOps 전환은 다음 단계로 명시.</li>
+            <li><b>OTel Java agent 자동계측</b> — 코드 변경 없이 HTTP/JDBC/Kafka/Redis 스팬. 앱은 OTLP 엔드포인트만 안다.</li>
+            <li><b>Loki + Tempo(LGTM)</b> vs ELK — 메모리 1/4, trace_id 클릭 → 로그로 3신호 상관 조회.</li>
+            <li><b>Sealed Secrets</b> — 저장소를 공개해도 안전 + 설치 1분.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>상태</h4>
+          <p>k3s 설치·점검 스크립트, ClusterIssuer, Actions 파이프라인, Helm 차트 2종(HPA/PDB/probe/OTel 주입), LGTM values, RED 대시보드 JSON, 런북까지 저장소에 준비되어 있고 <b>서버 배포와 롤링 배포 중 k6 에러율 측정은 진행 중</b>입니다. 이 섹션의 수치는 배포 후 갱신합니다.</p>
+        </div>
+      </div>
+      <div class="links-row">
+        <a href="https://github.com/geumyeongchoi/homelab-platform/blob/main/README.md" target="_blank" rel="noopener">README</a>
+        <a href="https://github.com/geumyeongchoi/homelab-platform/blob/main/github-workflows/deploy.yml" target="_blank" rel="noopener">deploy.yml</a>
+        <a href="https://github.com/geumyeongchoi/homelab-platform/tree/main/helm" target="_blank" rel="noopener">Helm 차트</a>
+        <a href="https://github.com/geumyeongchoi/homelab-platform/blob/main/docs/runbook.md" target="_blank" rel="noopener">런북</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <h2>개발 방식 — AI 에이전트와 함께, 검증은 게이트로</h2>
+    <p class="lead">세 저장소 모두 같은 규칙으로 만들었습니다. 현업에서 설계·운영 중인 "AI 코딩 에이전트 하네스"를 개인 프로젝트에 그대로 적용한 것입니다.</p>
+    <div class="card">
+      <ul class="tight">
+        <li><b>규칙은 한 문서에</b> — 각 저장소의 <code>CLAUDE.md</code>(=<code>AGENTS.md</code>)에 스택, 패키지 구조, HARD-GATE(예: "재고를 바꾸는 코드는 오직 Lua 안에서만", "성능 수치는 k6 결과 파일에서만 인용", "API 키 하드코딩 금지")를 명시. 에이전트가 무엇을 하든 이 규칙을 먼저 읽는다.</li>
+        <li><b>스펙 먼저</b> — <code>specs/dayN.md</code>에 DoD와 테스트 시나리오를 쓰고, 그것을 테스트 코드로 옮긴 뒤 구현. 아키텍처 규칙(domain 은 프레임워크 무의존, 유스케이스는 포트만 의존)은 ArchUnit 으로 강제.</li>
+        <li><b>2단 검증 게이트</b> — <code>verify.sh --fast</code>(compile + ktlint + 단위/아키텍처, 수십 초) 통과 전 커밋 금지, <code>--full</code>(Testcontainers 통합)은 머지 전. 무거운 게이트는 우회를 낳는다는 경험에서 나온 구성.</li>
+        <li><b>수치는 재현 가능하게</b> — <code>./gradlew eval</code>, <code>k6 run</code> 한 번으로 README 표가 다시 만들어진다. 이 페이지의 모든 숫자는 그 결과 파일에서 가져왔다.</li>
+        <li><b>역할 분리</b> — 에이전트(Claude)는 스펙 기준으로 구현·테스트를 수행하고, 설계 판단·검증·커밋은 사람이 확인한다.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <h2>기술 스택</h2>
+    <div class="card">
+      <dl class="stack">
+        <dt>Language</dt><dd>Kotlin, Java 21, Python(Airflow)</dd>
+        <dt>Framework</dt><dd>Spring Boot 3.x, Spring AI, Spring WebFlux/R2DBC, Spring Batch, Spring Cloud AWS</dd>
+        <dt>Data</dt><dd>PostgreSQL(pgvector), MySQL(파티셔닝), Redis(Sentinel/Lua/Redisson), MongoDB, Elasticsearch</dd>
+        <dt>Access</dt><dd>jOOQ, JPA/QueryDSL, MyBatis, Spring JDBC</dd>
+        <dt>Messaging</dt><dd>Kafka(AWS MSK), AWS SQS FIFO, Transactional Outbox</dd>
+        <dt>Infra</dt><dd>AWS(S3·SQS·MSK·AppConfig·Secrets Manager), Docker, Kubernetes(k3s), Helm, GitHub Actions, Traefik, Testcontainers, Jib</dd>
+        <dt>Observability</dt><dd>Micrometer, OpenTelemetry, Prometheus/Grafana, Loki, Tempo</dd>
+        <dt>Quality</dt><dd>Kotest, JUnit5, MockK, Cucumber(BDD), ArchUnit, ktlint, k6, Resilience4j</dd>
+        <dt>AI-native</dt><dd>Claude Code(hooks/skills/agents), Codex/AGENTS.md, Cursor, MCP(서버 구현·클라이언트 연동), 스펙 주도 개발</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    최금영 · <a href="https://github.com/geumyeongchoi">github.com/geumyeongchoi</a> · 이 페이지의 소스: <a href="https://github.com/geumyeongchoi/geumyeongchoi.github.io">geumyeongchoi.github.io</a> · 마지막 갱신 2026-09
+  </div>
+</footer>
+
+</body>
+</html>
